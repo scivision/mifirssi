@@ -52,6 +52,7 @@ def parsehtml(html):
     return status,rssi,sinr,bars
 
 def str2num(soup,strn):
+    #FIXME also candidate for speedup
     try:
         return float(list(soup.findAll(id=strn)[0].children)[0][:-3])
     except ValueError:
