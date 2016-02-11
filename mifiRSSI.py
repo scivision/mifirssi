@@ -13,7 +13,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
 interval = 6 #match mifi
-url = 'http://my.jetpack'
+baseurl = 'http://my.jetpack'
+tailurl = '/about_jetpack/diagnostics.html'
 outfn = '~/mifirssi.csv'
 
 def pollrssi(url,outfn,interval):
@@ -36,7 +37,7 @@ def setuphtml(url):
     s.set_timeout(10) 
     s.set_attribute('auto_load_images',False)
     print('waiting for page')
-    s.visit('/about_jetpack/diagnostics.html')
+    s.visit(tailurl)
     print('page loaded')
     return s
 
