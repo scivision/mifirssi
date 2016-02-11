@@ -8,7 +8,7 @@ Michael Hirsch
 import dryscrape #needed to get jQuery outputs
 dryscrape.start_xvfb()
 #
-from pathlib2 import Path
+from pathlib import Path
 from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
