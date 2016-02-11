@@ -2,6 +2,9 @@
 Mifi RSSI reader and logger
 ===========================
 
+Example of using dryscrape to get jQuery updated webpage and Beautiful Soup to parse the HTML. 
+Could be readily adapted for fantasy sports teams, political polling live results, and the like.
+
 Tested with Franklin Wireless MHS800L a.k.a. Verizon Wireless Ellipsis MiFi.
 Logs:
 
