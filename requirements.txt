@@ -1,1 +1,2 @@
-dryscrape
+pandas
+matplotlib

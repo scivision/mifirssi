@@ -6,35 +6,41 @@ Not notable for efficiency.
 Michael Hirsch
 """
 import dryscrape #needed to get jQuery outputs
-dryscrape.start_xvfb()
 #
-from pathlib import Path
+#from pathlib import Path
 from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
-interval = 6 #match mifi
+#
+from mifirssi.plots import readrssi,plotrssi
+#
+
+interval = 6 #match mifi [seconds]
 baseurl = 'http://my.jetpack'
 tailurl = '/about_jetpack/diagnostics.html'
-outfn = '~/mifirssi.csv'
 
 def pollrssi(url,outfn,interval):
     outfn = Path(outfn).expanduser()
-    
+
+    dryscrape.start_xvfb()
+
     sess = setuphtml(url)
-    
+
+    outfn.write_text('time,status,rssi,sinr,bars')
+
     while True:
         html = sess.body()
         status,rssi,sinr,bars = parsehtml(html)
         line = '{},{},{},{},{}\n'.format(datetime.utcnow().strftime('%xT%X'),status,rssi,sinr,bars)
         with open(str(outfn),'a') as f:
             f.write(line)
-            
+
         sleep(interval)
-        
+
 
 def setuphtml(url):
     s = dryscrape.Session(base_url=url)
-    s.set_timeout(10) 
+    s.set_timeout(10)
     s.set_attribute('auto_load_images',False)
     print('waiting for page')
     s.visit(tailurl)
@@ -47,9 +53,9 @@ def parsehtml(html):
     status = list(soup.findAll(id='NetworkStatus')[0].children)[0]
     rssi = str2num(soup,'RSSI')
     sinr = str2num(soup,'SINR')
-    
+
     bars = getbars(soup)
-    
+
     return status,rssi,sinr,bars
 
 def str2num(soup,strn):
@@ -58,7 +64,7 @@ def str2num(soup,strn):
         return float(list(soup.findAll(id=strn)[0].children)[0][:-3])
     except ValueError:
         return ''
-        
+
 def getbars(soup):
     imgs = soup.findAll('img') #FIXME more efficient
     for i in imgs:
@@ -68,6 +74,17 @@ def getbars(soup):
         except KeyError:
             continue
     return ''
-    
+
 if __name__ == '__main__':
-    pollrssi(url,outfn,interval)
+    from argparse import ArgumentParser
+    p = ArgumentParser()
+    p.add_argument('-o','--outfn',help='name of .csv file to write',default='~/mifirssi.csv')
+    p.add_argument('-p','--plotfn',help='name of .csv file to plot')
+    p = p.parse_args()
+
+    if p.plotfn:
+        print('plotting {}'.format(p.plotfn))
+        dat = readrssi(p.plotfn,interval)
+        plotrssi(dat)
+    else: #record
+        pollrssi(baseurl,p.outfn,interval)

@@ -1,3 +1,4 @@
+time,status,rssi,sinr,bars
 12/08/15T21:16:53,Connected,-80.0,17.38,5
 12/08/15T21:16:59,Connected,-77.4,19.64,5
 12/08/15T21:17:05,Connected,-75.7,23.22,5

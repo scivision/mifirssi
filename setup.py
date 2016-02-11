@@ -13,6 +13,7 @@ setup(name='mifirssi',
 	  long_description=long_description,
 	  author='Michael Hirsch',
 	  url='https://github.com/scivision/mifirssi',
+      install_requires=['dryscrape'],
       packages=['mifirssi'],
 	  )
 
