@@ -25,3 +25,8 @@ Install
 	python setup.py develop
 
 
+Example Plot
+============
+::
+	
+	python mifiRSSI.py -p test/mifirssi.csv
