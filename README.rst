@@ -24,11 +24,11 @@ Install
 
     apt install xvfb
 
-	python setup.py develop
+    python setup.py develop
 
 
 Example Plot
 ============
 ::
 	
-	python mifiRSSI.py -p test/mifirssi.csv
+    python mifiRSSI.py -p test/mifirssi.csv
