@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 from pathlib import Path
 from dateutil.parser import parse
 from datetime import timedelta

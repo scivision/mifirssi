@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """ logs franklin Wireless MHS800L a.k.a. Verizon Ellipsis MiFi RSSI and connection status
 simple example of parsing a jQuery driven site.
 Not notable for efficiency.
@@ -7,7 +7,7 @@ Michael Hirsch
 """
 import dryscrape #needed to get jQuery outputs
 #
-#from pathlib import Path
+from pathlib import Path
 from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
@@ -32,7 +32,7 @@ def pollrssi(url,outfn,interval):
         html = sess.body()
         status,rssi,sinr,bars = parsehtml(html)
         line = '{},{},{},{},{}\n'.format(datetime.utcnow().strftime('%xT%X'),status,rssi,sinr,bars)
-        with open(str(outfn),'a') as f:
+        with outfn.open('a') as f:
             f.write(line)
 
         sleep(interval)
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     p = p.parse_args()
 
     if p.plotfn:
-        print('plotting {}'.format(p.plotfn))
+        print(f'plotting {p.plotfn}')
         dat = readrssi(p.plotfn,interval)
         plotrssi(dat)
     else: #record
