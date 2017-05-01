@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from time import sleep
 #
-from mifirssi.plots import readrssi,plotrssi
+from mifirssi import readrssi,plotrssi
 #
 
 interval = 6 #match mifi [seconds]
@@ -31,7 +31,7 @@ def pollrssi(url,outfn,interval):
     while True:
         html = sess.body()
         status,rssi,sinr,bars = parsehtml(html)
-        line = '{},{},{},{},{}\n'.format(datetime.utcnow().strftime('%xT%X'),status,rssi,sinr,bars)
+        line = f'{datetime.utcnow().strftime("%xT%X")},{status},{rssi},{sinr},{bars}\n'
         with outfn.open('a') as f:
             f.write(line)
 
@@ -39,7 +39,10 @@ def pollrssi(url,outfn,interval):
 
 
 def setuphtml(url):
-    s = dryscrape.Session(base_url=url)
+    try:
+        s = dryscrape.Session(base_url=url)
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f'pip install webkit-server    {e}')
     s.set_timeout(10)
     s.set_attribute('auto_load_images',False)
     print('waiting for page')
@@ -66,7 +69,7 @@ def str2num(soup,strn):
         return ''
 
 def getbars(soup):
-    imgs = soup.findAll('img') #FIXME more efficient
+    imgs = soup.findAll('img')  # FIXME more efficient
     for i in imgs:
         try:
             if i['data-status']=='SignalStrength':
@@ -83,7 +86,7 @@ if __name__ == '__main__':
     p = p.parse_args()
 
     if p.plotfn:
-        print(f'plotting {p.plotfn}')
+        print('plotting',p.plotfn)
         dat = readrssi(p.plotfn,interval)
         plotrssi(dat)
     else: #record
