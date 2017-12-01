@@ -24,7 +24,7 @@ Install
 
     apt install xvfb
 
-    python setup.py develop
+    pip install -e .
 
 
 Example Plot
